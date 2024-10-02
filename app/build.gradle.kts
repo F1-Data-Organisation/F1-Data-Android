@@ -27,6 +27,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "URL_WS", "\"https://f1-data-ws-node.vercel.app\"")
+            resValue("string", "url_ws", "https://f1-data-ws-node.vercel.app")
+        }
+        debug {
+            buildConfigField("String", "URL_WS", "\"https://f1-data-ws-node.vercel.app\"")
+            resValue("string", "url_ws", "https://f1-data-ws-node.vercel.app")
         }
     }
     compileOptions {
@@ -38,6 +44,8 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
+        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -50,7 +58,7 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.gson)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
