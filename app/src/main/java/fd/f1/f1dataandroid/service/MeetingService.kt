@@ -9,7 +9,7 @@ class MeetingService {
     private val items = mutableMapOf<String, String>()
 
     suspend fun fetchAllMeetings(): List<Meeting> {
-        return RequestWS.decodeAPIInfo(route = "meetings", queryItems = items)
+        return RequestWS.decodeAPIInfoList(route = "meetings", queryItems = items)
     }
 
     suspend fun fetchMeetingByKey(key: Int): Meeting {
@@ -17,7 +17,7 @@ class MeetingService {
     }
 
     suspend fun fetchSessionsByMeeting(key: Int): List<Session> {
-        return RequestWS.decodeAPIInfo(route = "meetings/sessions/mt-key/${key}", queryItems = items)
+        return RequestWS.decodeAPIInfoList(route = "meetings/sessions/mt-key/${key}", queryItems = items)
     }
 
     suspend fun fetchSessionByKey(key: Int): Session {

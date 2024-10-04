@@ -1,6 +1,7 @@
 package fd.f1.f1dataandroid.service
 
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import fd.f1.f1dataandroid.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -24,9 +25,7 @@ class RequestWS {
 
             // Construit l'URL avec les paramètres de requête
             val urlString = "${BuildConfig.URL_WS}/$route"
-            val urlWithParams = buildUrl(urlString, queryItems)
-
-            val url = URL(urlWithParams)
+            val url = buildUrl(urlString, queryItems)
 
             (url.openConnection() as? HttpURLConnection)?.run {
                 requestMethod = "GET"
@@ -38,22 +37,40 @@ class RequestWS {
                 // Récupère les données et décode
                 inputStream.bufferedReader().use { reader ->
                     val responseData = reader.readText()
-                    return@withContext decodeJson(responseData, T::class.java)
+                    return@withContext Gson().fromJson(responseData, T::class.java)
+                }
+            } ?: throw WSError.InvalidURL
+        }
+
+        suspend inline fun <reified T> decodeAPIInfoList(
+            route: String,
+            queryItems: Map<String, String>
+        ): List<T> = withContext(Dispatchers.IO) {
+
+            // Construit l'URL avec les paramètres de requête
+            val urlString = "${BuildConfig.URL_WS}/$route"
+            val url = buildUrl(urlString, queryItems)
+
+            (url.openConnection() as? HttpURLConnection)?.run {
+                requestMethod = "GET"
+
+                if (responseCode != HttpURLConnection.HTTP_OK) {
+                    throw WSError.InvalidStatusCode(responseCode)
+                }
+
+                // Récupère les données et décode
+                inputStream.bufferedReader().use { reader ->
+                    val responseData = reader.readText()
+                    val type = object : TypeToken<List<T>>() {}
+                    return@withContext Gson().fromJson(responseData, type)
                 }
             } ?: throw WSError.InvalidURL
         }
 
         /**
-         * Fonction utilitaire pour décoder une chaîne JSON en un objet.
-         */
-        fun <T> decodeJson(jsonString: String, classOfT: Class<T>): T {
-            return Gson().fromJson(jsonString, classOfT)
-        }
-
-        /**
          * Construit une URL avec des paramètres de requête.
          */
-        fun buildUrl(baseUrl: String, queryItems: Map<String, String>): String {
+        fun buildUrl(baseUrl: String, queryItems: Map<String, String>): URL {
             val urlBuilder = StringBuilder(baseUrl)
             if (queryItems.isNotEmpty()) {
                 urlBuilder.append("?")
@@ -64,7 +81,7 @@ class RequestWS {
                     urlBuilder.append(it)
                 }
             }
-            return urlBuilder.toString()
+            return URL(urlBuilder.toString())
         }
     }
 }

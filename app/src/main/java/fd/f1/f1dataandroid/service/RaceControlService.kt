@@ -10,10 +10,10 @@ class RaceControlService {
             queryItems["driver"] = num.toString()
         }
 
-        return RequestWS.decodeAPIInfo(route = "race-control/team-radios/session/${session}", queryItems = queryItems)
+        return RequestWS.decodeAPIInfoList(route = "race-control/team-radios/session/${session}", queryItems = queryItems)
     }
 
     suspend fun fetchAllControlsInSession(session: Int): List<RaceControl> {
-        return RequestWS.decodeAPIInfo(route = "race-control/controls/session/${session}", queryItems = mutableMapOf<String, String>())
+        return RequestWS.decodeAPIInfoList(route = "race-control/controls/session/${session}", queryItems = mutableMapOf<String, String>())
     }
 }

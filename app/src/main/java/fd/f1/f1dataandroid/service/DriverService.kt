@@ -10,7 +10,7 @@ class DriverService {
             queryItems["session"] = num.toString()
         }
 
-        return RequestWS.decodeAPIInfo(route = "drivers", queryItems = queryItems)
+        return RequestWS.decodeAPIInfoList(route = "drivers", queryItems = queryItems)
     }
 
     suspend fun fetchDriverByNumber(driver: Int, session: Int?): Driver {
@@ -23,6 +23,6 @@ class DriverService {
     }
 
     suspend fun findDriverRacePace(session: Int, driver: Int): List<LapData> {
-        return RequestWS.decodeAPIInfo(route = "drivers/race-pace-session/${session}/${driver}", queryItems = mutableMapOf<String, String>())
+        return RequestWS.decodeAPIInfoList(route = "drivers/race-pace-session/${session}/${driver}", queryItems = mutableMapOf<String, String>())
     }
 }

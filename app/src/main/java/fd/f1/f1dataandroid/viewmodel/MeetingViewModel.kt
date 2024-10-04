@@ -1,8 +1,16 @@
 package fd.f1.f1dataandroid.viewmodel
 
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import fd.f1.f1dataandroid.service.MeetingService
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 sealed class MeetingState {
@@ -13,90 +21,90 @@ sealed class MeetingState {
 }
 
 class MeetingViewModel: ViewModel() {
-    var state: MeetingState = MeetingState.NotAvailable
-        private set
+    private var _state = MutableStateFlow<MeetingState>(MeetingState.NotAvailable)
+    val state: StateFlow<MeetingState> = _state.asStateFlow()
 
     private val service = MeetingService()
 
     fun getAllMeetings() {
-        state = MeetingState.Loading
+        _state.value = MeetingState.Loading
 
         viewModelScope.launch {
             try {
                 val result = service.fetchAllMeetings()
-                state = MeetingState.Success(data = result)
+                _state.value = MeetingState.Success(data = result)
             } catch (error: Throwable) {
-                state = MeetingState.Failed(error)
-                println(error.localizedMessage)
+                _state.value = MeetingState.Failed(error)
+                println(error)
             }
         }
     }
 
     fun getMeetingByKey(key: Int) {
-        state = MeetingState.Loading
+        _state.value = MeetingState.Loading
 
         viewModelScope.launch {
             try {
                 val result = service.fetchMeetingByKey(key = key)
-                state = MeetingState.Success(data = result)
+                _state.value = MeetingState.Success(data = result)
             } catch (error: Throwable) {
-                state = MeetingState.Failed(error)
+                _state.value = MeetingState.Failed(error)
                 println(error.localizedMessage)
             }
         }
     }
 
     fun getAllSessionsFromMeeting(key: Int) {
-        state = MeetingState.Loading
+        _state.value = MeetingState.Loading
 
         viewModelScope.launch {
             try {
                 val result = service.fetchSessionsByMeeting(key = key)
-                state = MeetingState.Success(data = result)
+                _state.value = MeetingState.Success(data = result)
             } catch (error: Throwable) {
-                state = MeetingState.Failed(error)
+                _state.value = MeetingState.Failed(error)
                 println(error.localizedMessage)
             }
         }
     }
 
     fun getSessionByKey(key: Int) {
-        state = MeetingState.Loading
+        _state.value = MeetingState.Loading
 
         viewModelScope.launch {
             try {
                 val result = service.fetchSessionByKey(key = key)
-                state = MeetingState.Success(data = result)
+                _state.value = MeetingState.Success(data = result)
             } catch (error: Throwable) {
-                state = MeetingState.Failed(error)
+                _state.value = MeetingState.Failed(error)
                 println(error.localizedMessage)
             }
         }
     }
 
     fun getSessionClassification(key: Int) {
-        state = MeetingState.Loading
+        _state.value = MeetingState.Loading
 
         viewModelScope.launch {
             try {
                 val result = service.fetchSessionClassification(key = key)
-                state = MeetingState.Success(data = result)
+                _state.value = MeetingState.Success(data = result)
             } catch (error: Throwable) {
-                state = MeetingState.Failed(error)
+                _state.value = MeetingState.Failed(error)
                 println(error.localizedMessage)
             }
         }
     }
 
     fun getFastestLap(session: Int) {
-        state = MeetingState.Loading
+        _state.value = MeetingState.Loading
 
         viewModelScope.launch {
             try {
                 val result = service.fetchFastestLap(session = session)
-                state = MeetingState.Success(data = result)
+                _state.value = MeetingState.Success(data = result)
             } catch (error: Throwable) {
-                state = MeetingState.Failed(error)
+                _state.value = MeetingState.Failed(error)
                 println(error.localizedMessage)
             }
         }
