@@ -1,70 +1,58 @@
 package fd.f1.f1dataandroid.ui
 
-import fd.f1.f1dataandroid.R
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.sp
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.composable
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import fd.f1.f1dataandroid.extensions.f1Bold
-import fd.f1.f1dataandroid.ui.components.BottomNavigationBar
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import fd.f1.f1dataandroid.R
+import fd.f1.f1dataandroid.ui.components.AppTabView
+import fd.f1.f1dataandroid.ui.components.navbar.TopNavbar
 
 /**
  * Composable function that represents the main screen of the application.
- *
- * @param navController The navigation controller used for handling navigation between screens.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen(navController: NavHostController) {
+fun MainScreen() {
+    val navController = rememberNavController()
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentScreen = getCurrentScreen(backStackEntry)
+
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.app_name),
-                        style = TextStyle().f1Bold(16.sp)
-                    )
-                },
-                /*navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Localized description"
-                        )
-                    }
-                },*/
+            TopNavbar(
+                currentScreen = currentScreen,
+                canNavBack = navController.previousBackStackEntry != null,
+                navigateUp = { navController.navigateUp() },
+                navMoreApps = { navController.navigate("more-apps") }
             )
-        },
-        bottomBar = {
-            BottomAppBar {
-                BottomNavigationBar(navController = navController)
-            }
         }
     ) { innerPadding ->
-        // Le padding ici est appliqué au contenu du NavHost pour qu'il se place correctement entre la topBar et la bottomBar
         NavHost(
             navController,
-            startDestination = "home",
+            startDestination = "tab",
             modifier = Modifier.padding(innerPadding) // Applique le padding
         ) {
-            composable("home") { HomeView() }
-            composable("meetings-list") { MeetingsListView() }
+            composable("tab") { AppTabView(navController = navController) }
+            composable("more-apps") { MoreAppsView() }
         }
+    }
+}
+
+@Composable
+fun getCurrentScreen(backStackEntry: NavBackStackEntry?): String {
+    val route = backStackEntry?.destination?.route
+    return if (route == null || route == "tab") {
+        stringResource(id = R.string.app_name)
+    } else {
+        route
     }
 }

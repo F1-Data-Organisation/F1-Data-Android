@@ -8,7 +8,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
 import fd.f1.f1dataandroid.ui.MainScreen
 import fd.f1.f1dataandroid.ui.theme.F1DataTheme
 
@@ -17,9 +16,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             F1DataTheme {
-                val navController = rememberNavController()
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    MainScreen(navController = navController)
+                    MainScreen()
                 }
             }
         }
@@ -30,9 +28,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     F1DataTheme {
-        val navController = rememberNavController()
         Surface(modifier = Modifier.fillMaxSize()) {
-            MainScreen(navController = navController)
+            MainScreen()
         }
     }
 }
