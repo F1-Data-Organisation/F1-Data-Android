@@ -1,6 +1,8 @@
 package fd.f1.f1dataandroid.ui
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -19,6 +21,7 @@ import fd.f1.f1dataandroid.ui.components.navbar.TopNavbar
 /**
  * Composable function that represents the main screen of the application.
  */
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen() {
@@ -43,6 +46,9 @@ fun MainScreen() {
         ) {
             composable("tab") { AppTabView(navController = navController) }
             composable("more-apps") { MoreAppsView() }
+            composable("meeting/{myData}") { backStackEntry ->
+                MeetingView(backStackEntry)
+            }
         }
     }
 }

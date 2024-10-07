@@ -1,6 +1,8 @@
 package fd.f1.f1dataandroid.ui
 
 import android.annotation.SuppressLint
+import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.*
@@ -8,9 +10,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.lifecycle.viewmodel.compose.*
+import androidx.navigation.NavController
+import com.google.gson.Gson
 import fd.f1.f1dataandroid.extensions.*
 import fd.f1.f1dataandroid.model.Meeting
 import fd.f1.f1dataandroid.ui.components.*
@@ -18,13 +21,16 @@ import fd.f1.f1dataandroid.viewmodel.*
 
 @SuppressLint("DefaultLocale")
 @Composable
-fun MeetingsListView(meetingViewModel: MeetingViewModel = viewModel()) {
-    var firstLoad by remember { mutableStateOf(true) }
+fun MeetingsListView(
+    navController: NavController,
+    meetingViewModel: MeetingViewModel = viewModel()
+) {
     val state by meetingViewModel.state.collectAsState()
 
     Column(
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()
     ) {
         when (state) {
             is MeetingState.NotAvailable -> { Text("Aucune valeur disponible") }
@@ -43,19 +49,19 @@ fun MeetingsListView(meetingViewModel: MeetingViewModel = viewModel()) {
                     LazyColumn {
                         itemsIndexed(data) { index, meeting ->
                             if (meeting is Meeting) {
-                                //val destination = @Composable { MeetingView(meeting = meeting) }
-
-                                val modifier = Modifier
-                                    .fillMaxWidth()
                                 /*.animateContent(
                                     visible = !firstLoad.value,
                                     delayMillis = (index * 500)
                                 )*/
 
+                                val jsonMeeting = Gson().toJson(meeting)
+                                val destination = {
+                                    navController.navigate("meeting/${Uri.encode(jsonMeeting)}")
+                                }
                                 Row(
                                     modifier = Modifier
-                                        //.clickable(onClick = destination)
-                                        .then(modifier)
+                                        .fillMaxWidth()
+                                        .clickable(onClick = destination)
                                         .padding(16.dp),
                                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                                     verticalAlignment = Alignment.CenterVertically
@@ -87,16 +93,9 @@ fun MeetingsListView(meetingViewModel: MeetingViewModel = viewModel()) {
         }
     }
 
-    SideEffect {
-        if (firstLoad) {
+    LaunchedEffect(Unit) {
+        if (state !is MeetingState.Success<*>) {
             meetingViewModel.getAllMeetings()
-            firstLoad = false
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MeetingListPreview() {
-    MeetingsListView()
 }
