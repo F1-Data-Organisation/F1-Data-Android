@@ -1,32 +1,29 @@
-package fd.f1.f1dataandroid.ui.components
+package fd.f1.f1dataandroid.ui.components.navbar
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import fd.f1.f1dataandroid.extensions.f1Regular
 
-/**
- * Composable function that represents the bottom navigation bar of the application.
- *
- * @param navController The navigation controller used for handling navigation between screens.
- */
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
-    var selectedItem by rememberSaveable { mutableIntStateOf(0) }
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
-    NavigationBar {
+    NavigationBar(
+        contentColor = MaterialTheme.colorScheme.primary,
+    ) {
         NavigationBarItem(
             alwaysShowLabel = true,
             icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
@@ -36,13 +33,11 @@ fun BottomNavigationBar(navController: NavHostController) {
                     style = TextStyle().f1Regular(12.sp),
                 )
             },
-            selected = selectedItem == 0,
+            selected = currentRoute == "home",
             onClick = {
-                selectedItem = 0
                 navController.navigate("home") {
-                    navController.graph.startDestinationRoute?.let { route -> popUpTo(route) { saveState = true } }
+                    popUpTo(navController.graph.startDestinationId)
                     launchSingleTop = true
-                    restoreState = true
                 }
             }
         )
@@ -56,15 +51,19 @@ fun BottomNavigationBar(navController: NavHostController) {
                     style = TextStyle().f1Regular(12.sp),
                 )
             },
-            selected = selectedItem == 1,
+            selected = currentRoute == "meetings-list",
             onClick = {
-                selectedItem = 1
                 navController.navigate("meetings-list") {
-                    navController.graph.startDestinationRoute?.let { route -> popUpTo(route) { saveState = true } }
+                    popUpTo(navController.graph.startDestinationId)
                     launchSingleTop = true
-                    restoreState = true
                 }
             }
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun NavPreview() {
+    BottomNavigationBar(navController = rememberNavController())
 }
