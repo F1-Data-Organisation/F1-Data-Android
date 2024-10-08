@@ -70,7 +70,7 @@ fun MeetingView(entry: NavBackStackEntry) {
                     style = TextStyle().f1Regular(18.sp)
                 )
 
-                HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
+                HorizontalDivider(modifier = Modifier.padding(top = 16.dp))
             }
 
             when (state) {
@@ -83,31 +83,7 @@ fun MeetingView(entry: NavBackStackEntry) {
                 is MeetingState.Success<*> -> {
                     val data = (state as MeetingState.Success<*>).data
                     if (data is List<*>) {
-                        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                            for (i in data.indices) {
-                                val session = data[i]
-                                if (session is Session) {
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .clickable { println(session.name) },
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Text(
-                                            text = "${session.name} (${session.dateStart.toDate(withHours = true)})",
-                                            style = TextStyle().f1Bold(16.sp)
-                                        )
-                                        Spacer(modifier = Modifier.weight(1f))
-                                        Icon(
-                                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                                            contentDescription = "Go to session view",
-                                            tint = MaterialTheme.colorScheme.onPrimary
-                                        )
-                                    }
-                                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                                }
-                            }
-                        }
+                        SessionNavigation(data)
                     }
                 }
                 else -> { Text("Sessions not available") }
