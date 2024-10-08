@@ -25,7 +25,7 @@ class MeetingService {
     }
 
     suspend fun fetchSessionClassification(key: Int): List<Driver> {
-        return RequestWS.decodeAPIInfo(route = "meetings/session-classification/${key}", queryItems = items)
+        return RequestWS.decodeAPIInfoList(route = "meetings/session-classification/${key}", queryItems = items)
     }
 
     suspend fun fetchFastestLap(session: Int): LapData {
