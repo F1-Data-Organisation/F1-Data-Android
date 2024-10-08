@@ -27,7 +27,7 @@ fun AppTabRow(
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp)) {
         TabRow(
             selectedTabIndex = selectedTabIndex,
             containerColor = Color.Gray.copy(alpha = 0.5f),
@@ -52,7 +52,7 @@ fun AppTabRow(
         ) {
             tabs.forEachIndexed { index, tabTitle ->
                 Tab(
-                    text = { Text(tabTitle, style = TextStyle(textAlign = TextAlign.Center).f1Regular(12.sp)) },
+                    text = { Text(tabTitle, style = TextStyle(textAlign = TextAlign.Center).f1Regular(11.sp)) },
                     selected = selectedTabIndex == index,
                     interactionSource = DisabledInteractionSource(),
                     modifier = Modifier
