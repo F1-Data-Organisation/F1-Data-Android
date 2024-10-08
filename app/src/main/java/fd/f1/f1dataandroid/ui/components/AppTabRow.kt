@@ -45,7 +45,7 @@ fun AppTabRow(
             },
             modifier = Modifier
                 .padding(5.dp)
-                .height(45.dp)
+                .height(40.dp)
                 .clip(
                     shape = RoundedCornerShape(15.dp)
                 )
@@ -64,7 +64,7 @@ fun AppTabRow(
             }
         }
 
-        HorizontalDivider(modifier = Modifier.padding(8.dp))
+        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp, horizontal = 5.dp))
         contentScreens.getOrNull(selectedTabIndex)?.invoke()
     }
 }
