@@ -3,6 +3,9 @@ package fd.f1.f1dataandroid.viewmodel
 import fd.f1.f1dataandroid.service.DriverService
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 sealed class DriverState {
@@ -13,48 +16,48 @@ sealed class DriverState {
 }
 
 class DriverViewModel: ViewModel() {
-    var state: DriverState = DriverState.NotAvailable
-        private set
+    private var _state = MutableStateFlow<DriverState>(DriverState.NotAvailable)
+    val state: StateFlow<DriverState> = _state.asStateFlow()
 
     private val service = DriverService()
 
     fun getAllDrivers(session: Int?) {
-        state = DriverState.Loading
+        _state.value = DriverState.Loading
 
         viewModelScope.launch {
             try {
                 val result = service.fetchAllDrivers(session = session)
-                state = DriverState.Success(data = result)
+                _state.value = DriverState.Success(data = result)
             } catch (error: Throwable) {
-                state = DriverState.Failed(error)
+                _state.value = DriverState.Failed(error)
                 println(error.localizedMessage)
             }
         }
     }
 
     fun getDriverByNumber(number: Int, session: Int?) {
-        state = DriverState.Loading
+        _state.value = DriverState.Loading
 
         viewModelScope.launch {
             try {
                 val result = service.fetchDriverByNumber(driver = number, session = session)
-                state = DriverState.Success(data = result)
+                _state.value = DriverState.Success(data = result)
             } catch (error: Throwable) {
-                state = DriverState.Failed(error)
+                _state.value = DriverState.Failed(error)
                 println(error.localizedMessage)
             }
         }
     }
 
     fun getDriverRacePace(session: Int, driver: Int) {
-        state = DriverState.Loading
+        _state.value = DriverState.Loading
 
         viewModelScope.launch {
             try {
                 val result = service.findDriverRacePace(session = session, driver = driver)
-                state = DriverState.Success(data = result)
+                _state.value = DriverState.Success(data = result)
             } catch (error: Throwable) {
-                state = DriverState.Failed(error)
+                _state.value = DriverState.Failed(error)
                 println(error.localizedMessage)
             }
         }
