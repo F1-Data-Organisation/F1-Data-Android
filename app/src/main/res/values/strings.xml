@@ -1,8 +1,14 @@
 <resources>
     <string name="app_name" translatable="false">F1 Data</string>
+
+    <!-- Tab view -->
     <string name="tab_home">Home</string>
     <string name="tab_meetings_list">2024 Meetings</string>
+
+    <!-- Home view -->
     <string name="intro_home">Whether you\'re an enthusiast or an expert, dive behind the scenes and experience every Grand Prix as if you were there.</string>
+
+    <!-- More apps view -->
     <string name="more_f1_content">More F1® content</string>
     <string name="more_f1_apps">More apps from F1®</string>
     <string name="the_f1_world">The World of F1®</string>

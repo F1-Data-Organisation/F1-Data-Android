@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Tab view -->
     <string name="tab_home">Inicio</string>
     <string name="tab_meetings_list">Temporada 2024</string>
+
+    <!-- Home view -->
     <string name="intro_home">Tanto si eres un aficionado como un experto, sumérgete entre bastidores y vive cada Gran Premio como si estuvieras allí.</string>
+
+    <!-- More apps view -->
     <string name="more_f1_content">Más contenidos de F1®</string>
     <string name="more_f1_apps">Más aplicaciones de F1®</string>
     <string name="the_f1_world">El mundo de la F1®</string>

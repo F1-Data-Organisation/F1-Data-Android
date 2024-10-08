@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="intro_home">Que vous soyez passionné ou expert, plongez dans les coulisses de la compétition et vivez chaque Grand Prix comme si vous y étiez.</string>
-
-    <!-- TabView titles -->
+    <!-- Tab view -->
     <string name="tab_home">Accueil</string>
     <string name="tab_meetings_list">Meetings 2024</string>
+
+    <!-- Home view -->
+    <string name="intro_home">Que vous soyez passionné ou expert, plongez dans les coulisses de la compétition et vivez chaque Grand Prix comme si vous y étiez.</string>
+
+    <!-- More apps view -->
     <string name="more_f1_content">Plus de contenu F1®</string>
     <string name="more_f1_apps">Plus d\'applications F1®</string>
     <string name="the_f1_world">Le monde de la F1®</string>

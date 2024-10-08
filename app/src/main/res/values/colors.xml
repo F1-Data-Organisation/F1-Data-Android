@@ -5,6 +5,19 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
+    <color name="gray">#888888</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Flag colors -->
+    <color name="green_flag">#74BC4E</color>
+    <color name="yellow_flag">#CCB859</color>
+    <color name="double_yellow_flag">#CCB859</color>
+    <color name="blue_flag">#162A7B</color>
+    <color name="red_flag">#943228</color>
+    <color name="black_flag">#000000</color>
+    <color name="white_flag">#FFFFFF</color>
+    <color name="black_and_orange_flag">#E2944A</color><!--#9D6934-->
+    <color name="black_and_white_flag">#BBBBBB</color>
+    <color name="chequered_flag">#2196F3</color>
 </resources>
