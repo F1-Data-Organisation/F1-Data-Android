@@ -26,7 +26,7 @@ fun SessionView(entry: NavBackStackEntry) {
                 tabs = listOf("Classification", "Radios & race control", "Weather"),
                 contentScreens = listOf(
                     {  },
-                    {  },
+                    { SessionUnfoldingView(key = session.key) },
                     {  }
                 )
             )
