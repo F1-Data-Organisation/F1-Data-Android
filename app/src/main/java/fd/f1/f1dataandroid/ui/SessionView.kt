@@ -11,12 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
 import com.google.gson.Gson
 import fd.f1.f1dataandroid.model.Session
 import fd.f1.f1dataandroid.ui.components.AppTabRow
 
 @Composable
-fun SessionView(entry: NavBackStackEntry) {
+fun SessionView(entry: NavBackStackEntry, navController: NavController) {
     val sData = getSession(entry)
 
     Column(
@@ -27,7 +28,7 @@ fun SessionView(entry: NavBackStackEntry) {
             AppTabRow(
                 tabs = listOf("Classification", "Radios & race control", "Weather"),
                 contentScreens = listOf(
-                    { SessionCltView(session = session) },
+                    { SessionCltView(session = session, navController = navController) },
                     { SessionUnfoldingView(key = session.key) },
                     {  }
                 )
@@ -36,7 +37,7 @@ fun SessionView(entry: NavBackStackEntry) {
     }
 }
 
-fun getSession(entry: NavBackStackEntry): Session? {
+private fun getSession(entry: NavBackStackEntry): Session? {
     val jsonData = entry.arguments?.getString("session_data")
     val mData = jsonData?.let { Gson().fromJson(it, Session::class.java) }
     return mData

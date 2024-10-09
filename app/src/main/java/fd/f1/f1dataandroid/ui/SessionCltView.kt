@@ -1,6 +1,7 @@
 package fd.f1.f1dataandroid.ui
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.google.gson.Gson
 import fd.f1.f1dataandroid.extensions.f1Bold
 import fd.f1.f1dataandroid.model.*
 import fd.f1.f1dataandroid.ui.components.ErrorView
@@ -33,7 +36,8 @@ import fd.f1.f1dataandroid.viewmodel.*
 @Composable
 fun SessionCltView(
     meetingVM: MeetingViewModel = viewModel(),
-    session: Session
+    session: Session,
+    navController: NavController
 ) {
     val state by meetingVM.state.collectAsState()
 
@@ -77,7 +81,11 @@ fun SessionCltView(
                                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier.padding(horizontal = 5.dp)
-                                        .clickable(onClick = {  }),
+                                        .clickable(onClick = {
+                                            val jsonDriver = Gson().toJson(driver)
+                                            val jsonSession = Gson().toJson(session)
+                                            navController.navigate("data/${Uri.encode(jsonDriver)}/${Uri.encode(jsonSession)}")
+                                        }),
                                 ) {
                                     Text(
                                         text = String.format("%02d", index + 1),

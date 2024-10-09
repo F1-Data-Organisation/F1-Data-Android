@@ -28,11 +28,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.google.gson.Gson
 import fd.f1.f1dataandroid.extensions.f1Bold
+import fd.f1.f1dataandroid.model.Driver
+import fd.f1.f1dataandroid.model.Session
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -83,7 +88,16 @@ fun SessionNavigation(list: List<*>) {
         ) {
             composable("meeting-session-list") { MeetingSessionList(list, navController) }
             composable("session/{session_data}") { backStackEntry ->
-                SessionView(backStackEntry)
+                SessionView(backStackEntry, navController)
+            }
+            composable(
+                route = "data/{d_data}/{s_data}",
+                arguments = listOf(
+                    navArgument("d_data") { type = NavType.StringType },
+                    navArgument("s_data") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                DriverSessionDataView(backStackEntry)
             }
         }
     }
